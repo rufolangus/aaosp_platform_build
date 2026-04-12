@@ -29,3 +29,7 @@ PRODUCT_PACKAGES += \
     StorageManager \
     SystemUI \
     WallpaperCropper \
+PRODUCT_PACKAGES += AgenticLauncher
+PRODUCT_PACKAGES += ContactsMcp
+PRODUCT_COPY_FILES += packages/apps/AgenticLauncher/privapp-permissions-agenticlauncher.xml:$(TARGET_COPY_OUT_SYSTEM_EXT)/etc/permissions/privapp-permissions-agenticlauncher.xml
+PRODUCT_PACKAGES += ContactsMcp
