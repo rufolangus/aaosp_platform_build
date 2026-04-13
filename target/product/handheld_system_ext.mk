@@ -50,4 +50,12 @@ PRODUCT_PACKAGES += libllm_jni
 # looks there before the /data/local/llm/ dev fallback.
 PRODUCT_COPY_FILES += \
     external/llama.cpp/models/qwen2.5-0.5b-instruct-q8_0.gguf:$(TARGET_COPY_OUT_PRODUCT)/etc/llm/qwen2.5-0.5b-instruct-q8_0.gguf
+
+# Auto-grant runtime permissions for AAOSP MCP-providing apps so the
+# user doesn't see a permission prompt mid-tool-call. The consent
+# contract lives at the LLM layer (HITL), not the per-Android-permission
+# prompt. Installed to /system_ext/etc/default-permissions/, picked up
+# by PMS on first scan.
+PRODUCT_COPY_FILES += \
+    packages/apps/ContactsMcp/default-permissions-aaosp.xml:$(TARGET_COPY_OUT_SYSTEM_EXT)/etc/default-permissions/default-permissions-aaosp.xml
 # --- end AAOSP additions ------------------------------------------------------
