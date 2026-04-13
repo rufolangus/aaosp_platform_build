@@ -28,8 +28,26 @@ PRODUCT_PACKAGES += \
     Settings \
     StorageManager \
     SystemUI \
-    WallpaperCropper \
-PRODUCT_PACKAGES += AgenticLauncher
-PRODUCT_PACKAGES += ContactsMcp
-PRODUCT_COPY_FILES += packages/apps/AgenticLauncher/privapp-permissions-agenticlauncher.xml:$(TARGET_COPY_OUT_SYSTEM_EXT)/etc/permissions/privapp-permissions-agenticlauncher.xml
-PRODUCT_PACKAGES += ContactsMcp
+    WallpaperCropper
+
+# --- AAOSP system_ext additions -----------------------------------------------
+# Apps
+PRODUCT_PACKAGES += \
+    AgenticLauncher \
+    ContactsMcp
+
+# AgenticLauncher needs SUBMIT_LLM_REQUEST + QUERY_ALL_PACKAGES on a
+# privileged install — install the allowlist xml.
+PRODUCT_COPY_FILES += \
+    packages/apps/AgenticLauncher/privapp-permissions-agenticlauncher.xml:$(TARGET_COPY_OUT_SYSTEM_EXT)/etc/permissions/privapp-permissions-agenticlauncher.xml
+
+# JNI bridge to llama.cpp — installs libllm_jni.so to /system/lib64.
+# LlmManagerService loads it via System.loadLibrary("llm_jni").
+PRODUCT_PACKAGES += libllm_jni
+
+# Bake the Qwen 2.5 0.5B GGUF into /product/etc/llm so the LLM is
+# available on first boot with no adb push. LlmManagerService.findModel()
+# looks there before the /data/local/llm/ dev fallback.
+PRODUCT_COPY_FILES += \
+    external/llama.cpp/models/qwen2.5-0.5b-instruct-q8_0.gguf:$(TARGET_COPY_OUT_PRODUCT)/etc/llm/qwen2.5-0.5b-instruct-q8_0.gguf
+# --- end AAOSP additions ------------------------------------------------------
