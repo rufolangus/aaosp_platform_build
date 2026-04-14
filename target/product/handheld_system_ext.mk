@@ -34,7 +34,8 @@ PRODUCT_PACKAGES += \
 # Apps
 PRODUCT_PACKAGES += \
     AgenticLauncher \
-    ContactsMcp
+    ContactsMcp \
+    CalendarMcp
 
 # AgenticLauncher needs SUBMIT_LLM_REQUEST + QUERY_ALL_PACKAGES on a
 # privileged install — install the allowlist xml.
@@ -45,11 +46,12 @@ PRODUCT_COPY_FILES += \
 # LlmManagerService loads it via System.loadLibrary("llm_jni").
 PRODUCT_PACKAGES += libllm_jni
 
-# Bake the Qwen 2.5 0.5B GGUF into /product/etc/llm so the LLM is
+# Bake the Qwen 2.5 3B GGUF into /product/etc/llm so the LLM is
 # available on first boot with no adb push. LlmManagerService.findModel()
-# looks there before the /data/local/llm/ dev fallback.
+# looks there before the /data/local/llm/ dev fallback. Upgraded from
+# 0.5B in v0.5 — 3B has real tool-use reasoning; 0.5B pattern-matches.
 PRODUCT_COPY_FILES += \
-    external/llama.cpp/models/qwen2.5-0.5b-instruct-q8_0.gguf:$(TARGET_COPY_OUT_PRODUCT)/etc/llm/qwen2.5-0.5b-instruct-q8_0.gguf
+    external/llama.cpp/models/qwen2.5-3b-instruct-q4_k_m.gguf:$(TARGET_COPY_OUT_PRODUCT)/etc/llm/qwen2.5-3b-instruct-q4_k_m.gguf
 
 # Auto-grant runtime permissions for AAOSP MCP-providing apps so the
 # user doesn't see a permission prompt mid-tool-call. The consent
